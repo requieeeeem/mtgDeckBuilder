@@ -53,62 +53,64 @@ struct SearchView: View {
     }
     
     var body: some View {
-        ZStack {
-            Circle()
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                .frame(width: bigCircleRadius * 2, height: bigCircleRadius * 2)
-            
-            // Small circles on the circumference
-            ForEach(0..<numberOfCircles, id: \.self) { i in
-                let angle = 2 * .pi / CGFloat(numberOfCircles) * CGFloat(i) - .pi / 2
-                let xOffset = cos(angle) * bigCircleRadius
-                let yOffset = sin(angle) * bigCircleRadius
-                let chosenColor = dotColors[i]
-                
+        NavigationStack {
+            ZStack {
                 Circle()
-                    .fill(chosenColor)
-                    .frame(width: smallCircleRadius * 2, height: smallCircleRadius * 2)
-                    .offset(x: xOffset, y: yOffset)
-            }
-            VStack(spacing: 20) {
-                Text("Card Search")
-                    .font(.largeTitle)
-                    .padding(.top)
-                HStack {
-                    TextField("Enter card name", text: $query)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    
-                    Button("Search") {
-                        fetchCard(named: query)
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
+                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                    .frame(width: bigCircleRadius * 2, height: bigCircleRadius * 2)
                 
-                if let card = card {
-                    if let urlString = card.image_uris?.normal,
-                       let url = URL(string: urlString) {
-                        AsyncImage(url: url) { image in
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 300)
-                        } placeholder: {
-                            ProgressView()
+                // Small circles on the circumference
+                ForEach(0..<numberOfCircles, id: \.self) { i in
+                    let angle = 2 * .pi / CGFloat(numberOfCircles) * CGFloat(i) - .pi / 2
+                    let xOffset = cos(angle) * bigCircleRadius
+                    let yOffset = sin(angle) * bigCircleRadius
+                    let chosenColor = dotColors[i]
+                    
+                    Circle()
+                        .fill(chosenColor)
+                        .frame(width: smallCircleRadius * 2, height: smallCircleRadius * 2)
+                        .offset(x: xOffset, y: yOffset)
+                }
+                VStack(spacing: 20) {
+                    Text("Card Search")
+                        .font(.largeTitle)
+                        .padding(.top)
+                    HStack {
+                        TextField("Enter card name", text: $query)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        
+                        Button("Search") {
+                            fetchCard(named: query)
                         }
+                        .buttonStyle(.borderedProminent)
                     }
                     
-                    Text(card.name)
-                        .font(.title2)
-                        .padding()
-                } else if let errorMessage = errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                        .padding()
+                    if let card = card {
+                        if let urlString = card.image_uris?.normal,
+                           let url = URL(string: urlString) {
+                            AsyncImage(url: url) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 300)
+                            } placeholder: {
+                                ProgressView()
+                            }
+                        }
+                        
+                        Text(card.name)
+                            .font(.title2)
+                            .padding()
+                    } else if let errorMessage = errorMessage {
+                        Text(errorMessage)
+                            .foregroundColor(.red)
+                            .padding()
+                    }
+                    
+                    Spacer()
                 }
-                
-                Spacer()
+                .padding()
             }
-            .padding()
         }
     }
 }
