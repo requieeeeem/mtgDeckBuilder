@@ -10,6 +10,10 @@ import SwiftUI
 struct HomeView: View {
     var body: some View {
         TabView {
+            ManageView()
+                .tabItem {
+                    Label("Decks", systemImage: "square.stack")
+                }
             SearchView()
                 .tabItem {
                     Label("Card Search", systemImage: "magnifyingglass")

@@ -55,6 +55,9 @@ struct SearchView: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                Form {
+                    
+                }.navigationTitle("Card Search")
                 Circle()
                     .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                     .frame(width: bigCircleRadius * 2, height: bigCircleRadius * 2)
@@ -72,9 +75,6 @@ struct SearchView: View {
                         .offset(x: xOffset, y: yOffset)
                 }
                 VStack(spacing: 20) {
-                    Text("Card Search")
-                        .font(.largeTitle)
-                        .padding(.top)
                     HStack {
                         TextField("Enter card name", text: $query)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -84,29 +84,33 @@ struct SearchView: View {
                         }
                         .buttonStyle(.borderedProminent)
                     }
-                    
-                    if let card = card {
-                        if let urlString = card.image_uris?.normal,
-                           let url = URL(string: urlString) {
-                            AsyncImage(url: url) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 300)
-                            } placeholder: {
-                                ProgressView()
+                    Spacer()
+                    VStack {
+                        if let card = card {
+                            if let urlString = card.image_uris?.normal,
+                               let url = URL(string: urlString) {
+                                AsyncImage(url: url) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 400)
+                                        .padding()
+                                } placeholder: {
+                                    ProgressView()
+                                }
                             }
+                            
+                            Text(card.name)
+                                .font(.title2)
+                                .padding(.bottom)
+                        } else if let errorMessage = errorMessage {
+                            Text(errorMessage)
+                                .foregroundColor(.red)
+                                .padding()
                         }
-                        
-                        Text(card.name)
-                            .font(.title2)
-                            .padding()
-                    } else if let errorMessage = errorMessage {
-                        Text(errorMessage)
-                            .foregroundColor(.red)
-                            .padding()
                     }
-                    
+                    .background(.ultraThinMaterial)
+                    .border(.gray)
                     Spacer()
                 }
                 .padding()
