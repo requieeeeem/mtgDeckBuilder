@@ -9,12 +9,44 @@ import SwiftUI
 
 struct Card: Decodable {
     let name: String
-    let image_uris: ImageURIs?
+    let manaCost: String?
+    let typeLine: String?
+    let oracleText: String?
+    let imageURIs: ImageURIs?
+    let setName: String
+    let rarity: String
+    let collectorNumber: String
+    
+    enum CodingKeys: String, CodingKey {
+        case name
+        case manaCost = "mana_cost"
+        case typeLine = "type_line"
+        case oracleText = "oracle_text"
+        case imageURIs = "image_uris"
+        case setName = "set_name"
+        case rarity
+        case collectorNumber = "collector_number"
+    }
     
     struct ImageURIs: Decodable {
-        let normal: String
+        let small: String?
+        let normal: String?
+        let large: String?
+        let png: String?
+        let artCrop: String?
+        let borderCrop: String?
+        
+        enum CodingKeys: String, CodingKey {
+            case small
+            case normal
+            case large
+            case png
+            case artCrop = "art_crop"
+            case borderCrop = "border_crop"
+        }
     }
 }
+
 struct SearchView: View {
     let bigCircleRadius: CGFloat = 150
     let smallCircleRadius: CGFloat = 40
@@ -38,7 +70,7 @@ struct SearchView: View {
             return
         }
 
-        errorMessage = nil
+        errorMessage = ""
         card = nil
         
         Task {
@@ -55,9 +87,6 @@ struct SearchView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Form {
-                    
-                }.navigationTitle("Card Search")
                 Circle()
                     .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                     .frame(width: bigCircleRadius * 2, height: bigCircleRadius * 2)
@@ -87,7 +116,7 @@ struct SearchView: View {
                     Spacer()
                     VStack {
                         if let card = card {
-                            if let urlString = card.image_uris?.normal,
+                            if let urlString = card.imageURIs?.normal,
                                let url = URL(string: urlString) {
                                 AsyncImage(url: url) { image in
                                     image
@@ -115,6 +144,7 @@ struct SearchView: View {
                 }
                 .padding()
             }
+            .navigationTitle("Card Search")
         }
     }
 }

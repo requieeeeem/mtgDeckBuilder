@@ -9,28 +9,35 @@ import SwiftUI
 
 struct ManageView: View {
     @State private var query = ""
-    
+    @State private var decks = Array(1...20)
+
     var body: some View {
         NavigationStack {
-            Form {
-                TextField("Search decks", text: $query)
-                Section("Decklists") {
-                    HStack {
-                        Button("Add Deck") {
-                            
+            ZStack(alignment: .bottom) {
+                Form {
+                    TextField("Search decks", text: $query)
+                    Section("Decklists") {
+                        List(decks, id: \.self) { deck in
+                            Text("Deck \(deck)")
                         }
-                        .buttonStyle(.bordered)
-                        .frame(maxWidth: .infinity)
-                        Button("Import Deck") {
-                            
-                        }
-                        .buttonStyle(.bordered)
-                        .frame(maxWidth: .infinity)
                     }
-                    .frame(alignment: .bottom)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }.navigationTitle("Decks")
+
+                HStack {
+                    Button("Add Deck") {
+                        // Action
+                    }
+                    .frame(maxWidth: .infinity)
+
+                    Button("Import Deck") {
+                        // Action
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .padding()
+                .background(.ultraThinMaterial)
+            }
+            .navigationTitle("Decks")
         }
     }
 }

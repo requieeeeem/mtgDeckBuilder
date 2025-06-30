@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    
     var body: some View {
         TabView {
             ManageView()
@@ -19,6 +20,7 @@ struct HomeView: View {
                     Label("Card Search", systemImage: "magnifyingglass")
                 }
         }
+        .toolbarBackground(.yellow, for: .tabBar)
     }
 }
 
