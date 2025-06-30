@@ -20,7 +20,6 @@ struct HomeView: View {
                     Label("Card Search", systemImage: "magnifyingglass")
                 }
         }
-        .toolbarBackground(.yellow, for: .tabBar)
     }
 }
 
