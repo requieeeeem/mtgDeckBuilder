@@ -11,6 +11,10 @@ struct ManageView: View {
     @State private var query = ""
     @State private var decks = Array(1...20)
     
+    func delItem(at offset: IndexSet) {
+        decks.remove(atOffsets: offset)
+    }
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -22,25 +26,31 @@ struct ManageView: View {
                         ForEach(decks, id: \.self) { deck in
                             Text("Deck \(deck)")
                         }
+                        .onDelete(perform: delItem)
                     }
                 }
                 .safeAreaInset(edge: .bottom, alignment: .trailing) {
                     HStack {
                         Spacer()
-                        VStack() {
-                            Button("Add Deck") {
-                                // Action
-                            }
-                            .buttonStyle(.borderedProminent)
+                        Button() {
+                            // Action
+                        } label: {
+                            Image(systemName: "plus")
+                                .symbolVariant(.circle.fill)
+                                .font(.system(size: 54, weight: .bold, design: .rounded))
                         }
-                        .padding()
+                        .padding(.trailing)
                     }
+                    .padding()
                     
                 }
                 
                 
             }
             .navigationTitle("Decks")
+            .toolbar {
+                EditButton()
+            }
         }
     }
 }
