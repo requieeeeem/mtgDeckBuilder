@@ -6,6 +6,12 @@
 //
 
 import SwiftUI
+import Observation
+
+@Observable
+class Deck {
+    var cards: [Card] = []
+}
 
 struct ManageView: View {
     @State private var query = ""
@@ -44,8 +50,6 @@ struct ManageView: View {
                     .padding()
                     
                 }
-                
-                
             }
             .navigationTitle("Decks")
             .toolbar {
