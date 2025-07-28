@@ -6,40 +6,49 @@
 //
 
 import SwiftUI
-import Observation
+import SwiftData
 
-@Observable
-class Deck {
-    var cards: [Card] = []
-}
 
 struct ManageView: View {
-    @State private var query = ""
-    @State private var decks = Array(1...20)
+    @Environment(\.modelContext) var modelContext
+    @Query var decks: [Deck]
     
-    func delItem(at offset: IndexSet) {
-        decks.remove(atOffsets: offset)
+    @State private var path = NavigationPath()
+    @State private var query = ""
+    @State private var showAddDeck = false
+    
+    func delItem(at offsets: IndexSet) {
+        for offset in offsets {
+            let deck = decks[offset]
+            modelContext.delete(deck)
+        }
+    }
+    
+    var filterDecks: [Deck] {
+        guard !query.isEmpty else { return decks }
+        return decks.filter { $0.name.localizedCaseInsensitiveContains(query) }
     }
     
     var body: some View {
         NavigationStack {
             VStack {
                 List {
-                    Section {
-                        TextField("Search decks", text: $query)
-                    }
-                    Section("Decks") {
-                        ForEach(decks, id: \.self) { deck in
-                            Text("Deck \(deck)")
+                    ForEach(filterDecks) { deck in
+                        NavigationLink(value: deck) {
+                            VStack(alignment: .leading) {
+                                Text(deck.name)
+                                    .font(.headline)
+                                Text("Cards: \(deck.cardCount)")
+                            }
                         }
-                        .onDelete(perform: delItem)
                     }
+                    .onDelete(perform: delItem)
                 }
                 .safeAreaInset(edge: .bottom, alignment: .trailing) {
                     HStack {
                         Spacer()
                         Button() {
-                            // Action
+                            showAddDeck = true
                         } label: {
                             Image(systemName: "plus")
                                 .symbolVariant(.circle.fill)
@@ -54,6 +63,13 @@ struct ManageView: View {
             .navigationTitle("Decks")
             .toolbar {
                 EditButton()
+            }
+            .searchable(text: $query, prompt: "Search your deck")
+            .navigationDestination(isPresented: $showAddDeck) {
+                AddDeck(existingDeck: nil)
+            }
+            .navigationDestination(for: Deck.self) { deck in
+                AddDeck(existingDeck: deck)
             }
         }
     }

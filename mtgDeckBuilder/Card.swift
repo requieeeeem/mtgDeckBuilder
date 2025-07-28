@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Card: Decodable {
+struct Card: Codable, Hashable {
     let name: String
     let manaCost: String?
     let typeLine: String?
@@ -28,7 +28,7 @@ struct Card: Decodable {
         case collectorNumber = "collector_number"
     }
     
-    struct ImageURIs: Decodable {
+    struct ImageURIs: Codable, Hashable {
         let small: String?
         let normal: String?
         let large: String?

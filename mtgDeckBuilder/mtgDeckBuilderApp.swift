@@ -13,5 +13,6 @@ struct mtgDeckBuilderApp: App {
         WindowGroup {
             HomeView()
         }
+        .modelContainer(for: Deck.self)
     }
 }

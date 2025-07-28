@@ -31,7 +31,7 @@ struct SearchView: View {
             errorMessage = "Invalid card name"
             return
         }
-
+        
         errorMessage = ""
         card = nil
         
@@ -80,22 +80,29 @@ struct SearchView: View {
                     Spacer()
                     VStack {
                         if let card = card {
-                            if let urlString = card.imageURIs?.normal,
-                               let url = URL(string: urlString) {
-                                AsyncImage(url: url) { image in
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 400)
-                                        .padding()
-                                } placeholder: {
-                                    ProgressView()
+                            ScrollView {
+                                VStack {
+                                    if let urlString = card.imageURIs?.normal,
+                                       let url = URL(string: urlString) {
+                                        HStack {
+                                            AsyncImage(url: url) { image in
+                                                image
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(height: 400)
+                                                    .padding()
+                                            } placeholder: {
+                                                ProgressView()
+                                            }
+                                        }
+                                    }
+                                    Text("Name: \(card.name)")
+                                    Text("Mana Cost: \(card.manaCost ?? "0")")
+                                    Text("Type: \(card.typeLine ?? "None")")
+                                    Text("Oracle Text: \(card.oracleText ?? "None")")
                                 }
+                                .padding()
                             }
-                            
-                            Text(card.name)
-                                .font(.title2)
-                                .padding(.bottom)
                         } else if let errorMessage = errorMessage {
                             Text(errorMessage)
                                 .foregroundColor(.red)
