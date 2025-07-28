@@ -77,7 +77,6 @@ struct SearchView: View {
                         }
                         .buttonStyle(.borderedProminent)
                     }
-                    Spacer()
                     VStack {
                         if let card = card {
                             ScrollView {
@@ -97,9 +96,22 @@ struct SearchView: View {
                                         }
                                     }
                                     Text("Name: \(card.name)")
+                                        .font(.headline)
+                                    
+                                    Divider()
+                                    
                                     Text("Mana Cost: \(card.manaCost ?? "0")")
+                                        .font(.subheadline)
+                                    
+                                    Divider()
+                                    
                                     Text("Type: \(card.typeLine ?? "None")")
+                                        .font(.subheadline)
+                                    
+                                    Divider()
+                                    
                                     Text("Oracle Text: \(card.oracleText ?? "None")")
+                                        .font(.subheadline)
                                 }
                                 .padding()
                             }
