@@ -74,9 +74,26 @@ struct SearchView: View {
                             }
                         Button("Search") {
                             fetchCard(named: query)
+                            
+//                            TextField("Enter card name", text: $query)
+//                                .textInputAutocapitalization(.never)
+//                                .disableAutocorrection(true)
+//                            Button("Add") {
+//                                Task {
+//                                    await fetchCard(named: query)
+//                                    if let c = fetchedCard {
+//                                        addCard(c)
+//                                        query.removeAll()
+//                                    } else {
+//                                        errorMessage = "No card loaded to add"
+//                                    }
+//                                }
+//                            }
+//                            .buttonStyle(.borderedProminent)
                         }
                         .buttonStyle(.borderedProminent)
                     }
+                    
                     VStack {
                         if let card = card {
                             ScrollView {

@@ -20,6 +20,7 @@ struct HomeView: View {
                     Label("Card Search", systemImage: "magnifyingglass")
                 }
         }
+        .preferredColorScheme(.dark)
     }
 }
 

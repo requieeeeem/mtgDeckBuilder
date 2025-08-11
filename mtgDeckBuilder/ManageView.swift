@@ -15,7 +15,7 @@ struct ManageView: View {
     
     @State private var path = NavigationPath()
     @State private var query = ""
-    @State private var showAddDeck = false
+//    @State private var showAddDeck = false
     
     func delItem(at offsets: IndexSet) {
         for offset in offsets {
@@ -30,7 +30,7 @@ struct ManageView: View {
     }
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             VStack {
                 List {
                     ForEach(filterDecks) { deck in
@@ -38,7 +38,7 @@ struct ManageView: View {
                             VStack(alignment: .leading) {
                                 Text(deck.name)
                                     .font(.headline)
-                                Text("Cards: \(deck.cardCount)")
+                                Text("Cards: \(deck.cardCount)/100")
                             }
                         }
                     }
@@ -47,8 +47,8 @@ struct ManageView: View {
                 .safeAreaInset(edge: .bottom, alignment: .trailing) {
                     HStack {
                         Spacer()
-                        Button() {
-                            showAddDeck = true
+                        NavigationLink {
+                            AddDeck(existingDeck: nil)
                         } label: {
                             Image(systemName: "plus")
                                 .symbolVariant(.circle.fill)
@@ -60,14 +60,14 @@ struct ManageView: View {
                     
                 }
             }
-            .navigationTitle("Decks")
+            .navigationTitle("Commander Decks")
             .toolbar {
                 EditButton()
             }
             .searchable(text: $query, prompt: "Search your deck")
-            .navigationDestination(isPresented: $showAddDeck) {
-                AddDeck(existingDeck: nil)
-            }
+//            .navigationDestination(isPresented: $showAddDeck) {
+//                AddDeck(existingDeck: nil)
+//            }
             .navigationDestination(for: Deck.self) { deck in
                 AddDeck(existingDeck: deck)
             }
