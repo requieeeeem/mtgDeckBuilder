@@ -85,19 +85,23 @@ struct AddDeck: View {
                         .textInputAutocapitalization(.never)
                         .disableAutocorrection(true)
                         .onSubmit {
-                            Task {
-                                await fetchCard(named: query)
-                                if let c = fetchedCard {
-                                    if (cards.contains(c)) {
-                                        errorMessage = "Card is already in the deck"
+                            if (cards.count == 100) {
+                                errorMessage = "Deck capacity reached. Please remove some cards first."
+                            } else {
+                                Task {
+                                    await fetchCard(named: query)
+                                    if let c = fetchedCard {
+                                        if (cards.contains(c)) {
+                                            errorMessage = "Card is already in the deck"
+                                        }
+                                        else {
+                                            wasChanged = true
+                                            addCard(c)
+                                        }
+                                        query.removeAll()
+                                    } else {
+                                        errorMessage = "Card not found. Please try again."
                                     }
-                                    else {
-                                        wasChanged = true
-                                        addCard(c)
-                                    }
-                                    query.removeAll()
-                                } else {
-                                    errorMessage = "Card not found. Please try again."
                                 }
                             }
                         }
